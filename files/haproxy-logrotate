@@ -1,0 +1,13 @@
+/var/log/haproxy/*log {
+  dateext
+  copytruncate
+  daily
+  rotate 14
+  missingok
+  notifempty
+  sharedscripts
+  compress
+  postrotate
+    /sbin/service haproxy reload > /dev/null 2>/dev/null || true
+  endscript
+}
