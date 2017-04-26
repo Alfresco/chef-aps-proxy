@@ -1,5 +1,5 @@
 resource_name :haproxy_config
-
+default_action :nothing
 
 action :run do
   user 'haproxy' do
@@ -34,7 +34,7 @@ action :run do
   end
 
   service 'haproxy' do
-    supports :restart => true, :status => true, :reload => true
+    supports restart: true, status: true, reload: true
     action [:enable, :start]
   end
 
@@ -44,5 +44,4 @@ action :run do
     group 'root'
     mode 00644
   end
-
 end
