@@ -8,7 +8,7 @@ version '0.1'
 issues_url       'https://github.com/Alfresco/chef-aps-proxy/issues'
 source_url       'https://github.com/Alfresco/chef-aps-proxy'
 
-chef_version '~> 13.0.118'
+chef_version '~> 12.19.36'
 
 supports 'centos', '~> 7.0'
 
