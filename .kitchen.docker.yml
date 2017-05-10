@@ -26,3 +26,6 @@ suites:
   - name: default
     run_list:
       - recipe[aps-proxy::default]
+    verifier:
+      inspec_tests:
+        - path: test/inspec/
