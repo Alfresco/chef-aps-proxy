@@ -6,7 +6,7 @@ driver:
 
 provisioner:
   name: chef_zero
-
+  require_chef_omnibus: 12.19.36
 
 verifier:
   name: inspec
@@ -26,3 +26,6 @@ suites:
   - name: default
     run_list:
       - recipe[aps-proxy::default]
+    verifier:
+      inspec_tests:
+        - path: test/inspec/

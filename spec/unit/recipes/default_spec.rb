@@ -16,5 +16,8 @@ describe 'aps-proxy::default' do
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
+    it 'should include recipe' do
+      expect(chef_run).to include_recipe('aps-proxy::haproxy')
+    end
   end
 end
