@@ -2,8 +2,8 @@ default['aps-core']['haproxy-cfg']['general_config'] = [
   'log 127.0.0.1 local2 info',
   'pidfile /var/run/haproxy.pid',
   'uid 801',
-  'tune.ssl.maxrecord 1419',
-  'spread-checks 5',
+  'tune.ssl.maxrecord      1419',
+  'spread-checks           5',
   '#debug',
 ]
 
@@ -38,7 +38,6 @@ default['aps-core']['haproxy-cfg']['default_config'] = [
 default['aps-core']['haproxy-cfg']['stats_config'] = [
   'mode http',
   'option httplog',
-  '',
   '#This is the virtual URL to access the stats page',
   'stats uri /haproxy_stats',
   'stats realm HAProxy\ Statistics',
@@ -50,7 +49,7 @@ default['aps-core']['haproxy-cfg']['stats_config'] = [
 ]
 
 default['aps-core']['haproxy-cfg']['frontend_config'] = [
-  "bind *:<%= node['aps-proxy']['port'] %>",
+  "bind *:#{node['aps-proxy']['port']}",
   'capture request header X-Forwarded-For len 64',
   'capture request header User-agent len 256',
   'capture request header Cookie len 64',
@@ -63,14 +62,13 @@ default['aps-core']['haproxy-cfg']['frontend_config'] = [
   'acl robots path_reg ^/robots.txt$',
   'acl activiti_path path_beg /activiti-app/',
   'acl elb_health hdr(user-agent) -m beg -i ELB-HealthChecker',
-  '',
   '#acl cookie_set hdr_sub(cookie) TOHTTPS=1',
+  '',
   '# Blocked paths',
   'http-request deny if robots',
   '',
   '# Redirects',
   'redirect location /activiti-app/ if !activiti_path',
-  '',
   '#redirect scheme https code 301 set-cookie TOHTTPS=1 if !elb_health !cookie_set',
   '',
   '# List of backends',

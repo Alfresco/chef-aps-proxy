@@ -1,37 +1,39 @@
+<% if @properties %>
+  <% if @properties['general_config'] %>
 global
-<% if @properties['general_config'] %>
-  <% @properties['general_config'].each do |line| %>
+    <% @properties['general_config'].each do |line| %>
   <%= line %>
+    <% end %>
   <% end %>
-<% end %>
 
 defaults
-<% if @properties['default_config'] -%>
+  <% if @properties['default_config'] -%>
     <% @properties['default_config'].each do |line| -%>
-    <%= line %>
+  <%= line %>
     <% end -%> 
-<% end -%>
+  <% end -%>
 
 listen stats 0.0.0.0:15733
-<% if @properties['stats_config']  -%>
+  <% if @properties['stats_config']  -%>
     <% @properties['stats_config'] .each do |line| -%>
-    <%= line %>
+  <%= line %>
     <% end -%> 
-<% end -%>
+  <% end -%>
 
 # if http just redirect to https
 
 # frontend dealing with https traffic from the ELB
 frontend modeler
-<% if @properties['frontend_config']  -%>
+  <% if @properties['frontend_config']  -%>
     <% @properties['frontend_config'] .each do |line| -%>
-    <%= line %>
+  <%= line %>
     <% end -%> 
-<% end -%>
+  <% end -%>
 
 backend activiti
-<% if @properties['backend_config']  -%>
+  <% if @properties['backend_config']  -%>
     <% @properties['backend_config'] .each do |line| -%>
-    <%= line %>
+  <%= line %>
     <% end -%> 
+  <% end -%>
 <% end -%>
