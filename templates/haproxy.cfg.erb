@@ -1,82 +1,39 @@
+<% if @properties %>
+  <% if @properties['general_config'] %>
 global
-  log 127.0.0.1 local2 info
-  pidfile /var/run/haproxy.pid
-  uid 801
-  tune.ssl.maxrecord      1419
-  spread-checks           5
-  #debug
+    <% @properties['general_config'].each do |line| %>
+  <%= line %>
+    <% end %>
+  <% end %>
 
 defaults
-
-  mode http
-  log global
-  option httplog
-  option dontlognull
-  option redispatch
-  #optimisations
-  option tcp-smart-accept
-  option tcp-smart-connect
-  option contstats
-
-  maxconn 2000
-
-  timeout http-request 10s
-  timeout queue 1m
-  timeout connect 5s
-  timeout client 2m
-  timeout server 2m
-  timeout http-keep-alive 10s
-  timeout check 5s
-  timeout tarpit          60s
-  retries 3
-
-  compression algo gzip
-  compression type text/html text/html;charset=utf-8 text/plain text/css text/javascript application/x-javascript application/javascript application/ecmascript application/rss+xml application/atomsvc+xml application/atom+xml application/atom+xml;type=entry application/atom+xml;type=feed application/cmisquery+xml application/cmisallowableactions+xml application/cmisatom+xml application/cmistree+xml application/cmisacl+xml application/msword application/vnd.ms-excel application/vnd.ms-powerpoint
+  <% if @properties['default_config'] -%>
+    <% @properties['default_config'].each do |line| -%>
+  <%= line %>
+    <% end -%> 
+  <% end -%>
 
 listen stats 0.0.0.0:15733
-  mode http
-  option httplog
-  #This is the virtual URL to access the stats page
-  stats uri /haproxy_stats
-  stats realm HAProxy\ Statistics
-  stats auth stronguser:showmethehaproxystats
-  option dontlog-normal
-  monitor-net 127.0.0.1
-  monitor-uri /
-  http-request set-log-level silent
+  <% if @properties['stats_config']  -%>
+    <% @properties['stats_config'] .each do |line| -%>
+  <%= line %>
+    <% end -%> 
+  <% end -%>
 
 # if http just redirect to https
 
-
 # frontend dealing with https traffic from the ELB
 frontend modeler
-  bind *:<%= node['aps-proxy']['port'] %>
-  capture request header X-Forwarded-For len 64
-  capture request header User-agent len 256
-  capture request header Cookie len 64
-  capture request header Accept-Language len 64
-
-  # Changes to header responses
-  rspadd Strict-Transport-Security:\ max-age=15768000
-
-  # ACLS
-  acl robots path_reg ^/robots.txt$
-  acl activiti_path path_beg /activiti-app/
-  acl elb_health hdr(user-agent) -m beg -i ELB-HealthChecker
-  #acl cookie_set hdr_sub(cookie) TOHTTPS=1
-
-  # Blocked paths
-  http-request deny if robots
-
-  # Redirects
-  redirect location /activiti-app/ if !activiti_path
-  #redirect scheme https code 301 set-cookie TOHTTPS=1 if !elb_health !cookie_set
-
-  # List of backends
-  use_backend activiti if activiti_path
+  <% if @properties['frontend_config']  -%>
+    <% @properties['frontend_config'] .each do |line| -%>
+  <%= line %>
+    <% end -%> 
+  <% end -%>
 
 backend activiti
-  option log-health-checks
-  http-check expect rstatus ^4
-  option httpchk activiti-app/app/authentication/
-  server localhost localhost:8080 check inter 5000
+  <% if @properties['backend_config']  -%>
+    <% @properties['backend_config'] .each do |line| -%>
+  <%= line %>
+    <% end -%> 
+  <% end -%>
+<% end -%>
