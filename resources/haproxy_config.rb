@@ -30,6 +30,7 @@ action :run do
     owner 'root'
     group 'root'
     mode 00644
+    variables properties: node['aps-core']['haproxy-cfg']
     notifies :reload, 'service[haproxy]', :immediately
   end
 
