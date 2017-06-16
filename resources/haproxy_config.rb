@@ -18,6 +18,17 @@ action :run do
     action :upgrade
   end
 
+  selinux_commands = {}
+  selinux_commands['semanage permissive -a haproxy_t'] = 'semanage permissive -l | grep haproxy_t'
+  selinux_commands.each do |command, already_permissive|
+    execute "selinux-command-#{command}" do
+      command command
+      only_if 'getenforce | grep -i enforcing'
+      only_if 'which semanage'
+      not_if already_permissive
+    end
+  end
+
   directory '/etc/haproxy' do
     action :create
     owner 'root'
